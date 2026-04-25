@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIKKA — Cardápio Musical</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bege: #F8EBDA;
+    --bege-escuro: #EDD9C0;
+    --grafite: #4C4D4E;
+    --grafite-claro: #6E6F70;
+    --coral: #ED7268;
+    --branco: #FFFFFF;
+    --linha: rgba(76,77,78,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--branco);
+    color: var(--grafite);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+  }
+
+  /* CAPA */
+  .capa {
+    background: var(--bege);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+  }
+
+  .capa-deco {
+    position: absolute;
+    bottom: -60px;
+    right: -60px;
+    width: 320px;
+    height: 320px;
+    border: 1.5px solid rgba(76,77,78,0.15);
+    border-radius: 50%;
+  }
+  .capa-deco::before {
+    content: '';
+    position: absolute;
+    top: 30px; left: 30px; right: 30px; bottom: 30px;
+    border: 1px solid rgba(76,77,78,0.08);
+    border-radius: 50%;
+  }
+  .capa-deco-tl {
+    position: absolute;
+    top: -80px;
+    left: -80px;
+    width: 220px;
+    height: 220px;
+    border: 1px solid rgba(76,77,78,0.1);
+    border-radius: 50%;
+  }
+
+  .capa-linha-topo {
+    position: absolute;
+    top: 48px;
+    left: 60px;
+    right: 60px;
+    height: 1px;
+    background: rgba(76,77,78,0.2);
+  }
+  .capa-linha-baixo {
+    position: absolute;
+    bottom: 48px;
+    left: 60px;
+    right: 60px;
+    height: 1px;
+    background: rgba(76,77,78,0.2);
+  }
+
+  .capa-inner {
+    text-align: center;
+    z-index: 1;
+  }
+
+  .logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 96px;
+    font-weight: 600;
+    letter-spacing: 24px;
+    color: var(--grafite);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .separador-logo {
+    width: 320px;
+    height: 1px;
+    background: rgba(76,77,78,0.3);
+    margin: 28px auto;
+  }
+
+  .subtitulo-capa {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 6px;
+    color: var(--grafite-claro);
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+
+  .ponto-coral {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--coral);
+    border-radius: 50%;
+    margin: 0 10px;
+    vertical-align: middle;
+  }
+
+  /* NAVEGAÇÃO */
+  .nav-fixo {
+    position: sticky;
+    top: 0;
+    background: var(--grafite);
+    z-index: 100;
+    padding: 0 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    border-bottom: 2px solid var(--coral);
+  }
+
+  .nav-marca {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 8px;
+    color: var(--bege);
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 0;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    color: rgba(248,235,218,0.6);
+    text-decoration: none;
+    text-transform: uppercase;
+    padding: 0 16px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s, background 0.2s;
+    border-right: 1px solid rgba(248,235,218,0.08);
+  }
+  .nav-links a:first-child { border-left: 1px solid rgba(248,235,218,0.08); }
+  .nav-links a:hover { color: var(--bege); background: rgba(237,114,104,0.15); }
+
+  /* SEÇÕES */
+  .secao {
+    padding: 80px 60px;
+    border-bottom: 1px solid var(--linha);
+  }
+
+  .secao:nth-child(even) {
+    background: #FAFAFA;
+  }
+
+  .secao-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--linha);
+  }
+
+  .secao-numero {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--coral);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .secao-titulo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 52px;
+    font-weight: 600;
+    letter-spacing: 8px;
+    color: var(--grafite);
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .secao-count {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--grafite-claro);
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  /* TABELA */
+  .tabela {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .tabela thead tr {
+    border-bottom: 1.5px solid var(--grafite);
+  }
+
+  .tabela thead th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--grafite-claro);
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 0 0 14px 0;
+    text-align: left;
+  }
+
+  .tabela thead th:last-child { text-align: center; }
+
+  .tabela tbody tr {
+    border-bottom: 1px solid var(--linha);
+    transition: background 0.15s;
+  }
+
+  .tabela tbody tr:hover {
+    background: rgba(237,114,104,0.04);
+  }
+
+  .tabela tbody td {
+    padding: 14px 0;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--grafite);
+    vertical-align: middle;
+  }
+
+  .tabela tbody td:first-child {
+    font-weight: 400;
+    font-size: 14px;
+    padding-right: 24px;
+  }
+
+  .tabela tbody td.interprete {
+    color: var(--grafite-claro);
+    font-size: 13px;
+    padding-right: 24px;
+  }
+
+  .tag-tom {
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--grafite);
+    background: var(--bege);
+    border: 1px solid var(--bege-escuro);
+    border-radius: 3px;
+    padding: 3px 8px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .tag-tom.original {
+    background: rgba(237,114,104,0.12);
+    border-color: rgba(237,114,104,0.3);
+    color: var(--coral);
+  }
+
+  /* CERIMÔNIA — GRID */
+  .cerimonial-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 2px;
+  }
+
+  .cerimonial-col {
+    background: var(--branco);
+    border: 1px solid var(--linha);
+  }
+
+  .cerimonial-col-header {
+    background: var(--grafite);
+    padding: 16px 20px;
+  }
+
+  .cerimonial-col-header h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--bege);
+    text-transform: uppercase;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .cerimonial-col ul {
+    list-style: none;
+    padding: 12px 0;
+  }
+
+  .cerimonial-col ul li {
+    font-size: 12px;
+    color: var(--grafite);
+    padding: 8px 20px;
+    border-bottom: 1px solid var(--linha);
+    font-weight: 300;
+    line-height: 1.4;
+  }
+
+  .cerimonial-col ul li:last-child { border-bottom: none; }
+
+  .cerimonial-col ul li .artista {
+    display: block;
+    font-size: 10px;
+    color: var(--coral);
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* MOMENTO BADGE */
+  .momento-secao {
+    margin-bottom: 32px;
+  }
+
+  .momento-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--coral);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .momento-label::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 1px;
+    background: var(--coral);
+  }
+
+  /* RODAPÉ */
+  .rodape {
+    background: var(--grafite);
+    padding: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .rodape-marca {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: 12px;
+    color: var(--bege);
+    text-transform: uppercase;
+  }
+
+  .rodape-releases {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .rodape-releases-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: rgba(248,235,218,0.4);
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .rodape-btns {
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn-release {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--bege);
+    border: 1px solid rgba(248,235,218,0.25);
+    border-radius: 3px;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+
+  .btn-release:hover {
+    background: var(--coral);
+    border-color: var(--coral);
+    color: var(--branco);
+  }
+
+  .rodape-info {
+    text-align: right;
+  }
+
+  .rodape-info p {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgba(248,235,218,0.4);
+    text-transform: uppercase;
+    line-height: 1.8;
+  }
+
+  .rodape-info span { color: var(--coral); }
+
+  /* ÍNDICE */
+  .indice {
+    background: var(--bege);
+    padding: 80px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px 80px;
+  }
+
+  .indice-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(76,77,78,0.15);
+    padding: 16px 0;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .indice-item:hover .indice-num { color: var(--coral); }
+
+  .indice-nome {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--grafite);
+  }
+
+  .indice-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--grafite-claro);
+    transition: color 0.2s;
+  }
+
+  .indice-header {
+    grid-column: 1 / -1;
+    margin-bottom: 8px;
+  }
+
+  @media print {
+    .nav-fixo { display: none; }
+    .secao { page-break-inside: avoid; }
+  }
+
+  @media (max-width: 900px) {
+    .logo { font-size: 52px; letter-spacing: 12px; }
+    .nav-fixo { padding: 0 20px; }
+    .nav-links { display: none; }
+    .secao { padding: 48px 24px; }
+    .secao-titulo { font-size: 32px; }
+    .cerimonial-grid { grid-template-columns: 1fr 1fr; }
+    .indice { padding: 48px 24px; grid-template-columns: 1fr; }
+    .rodape { padding: 40px 24px; flex-direction: column; gap: 20px; text-align: center; }
+    .rodape-info { text-align: center; }
+    .capa-linha-topo, .capa-linha-baixo { left: 24px; right: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CAPA -->
+<section class="capa">
+  <div class="capa-linha-topo"></div>
+  <div class="capa-linha-baixo"></div>
+  <div class="capa-deco"></div>
+  <div class="capa-deco-tl"></div>
+  <div class="capa-inner">
+    <div class="logo">MIKKA</div>
+    <div class="separador-logo"></div>
+    <div class="subtitulo-capa">
+      Cardápio Musical
+      <span class="ponto-coral"></span>
+      Repertório Completo 2025 · 2026
+    </div>
+  </div>
+</section>
+
+<!-- ÍNDICE -->
+<div class="indice" id="indice">
+  <div class="indice-header">
+    <div class="secao-numero">Índice</div>
+    <div class="secao-titulo" style="font-size:42px;">Repertório</div>
+  </div>
+  <a class="indice-item" href="#baladas-ingles"><span class="indice-nome">Baladas em Inglês</span><span class="indice-num">140</span></a>
+  <a class="indice-item" href="#bossas-mpb"><span class="indice-nome">Bossas & MPB Clássicas</span><span class="indice-num">143</span></a>
+  <a class="indice-item" href="#mpb-moderna"><span class="indice-nome">MPB Moderna & Baladas</span><span class="indice-num">43</span></a>
+  <a class="indice-item" href="#world-music"><span class="indice-nome">World Music</span><span class="indice-num">6</span></a>
+  <a class="indice-item" href="#jazz"><span class="indice-nome">Jazz Standards</span><span class="indice-num">40</span></a>
+  <a class="indice-item" href="#sambas"><span class="indice-nome">Sambas & Samba Rock</span><span class="indice-num">46</span></a>
+  <a class="indice-item" href="#cerimonial"><span class="indice-nome">Sugestões para Cerimônia</span><span class="indice-num">—</span></a>
+  <a class="indice-item" href="#forro"><span class="indice-nome">Forró & Xote</span><span class="indice-num">14</span></a>
+</div>
+
+<!-- NAVEGAÇÃO -->
+<nav class="nav-fixo">
+  <div class="nav-marca">MIKKA</div>
+  <ul class="nav-links">
+    <a href="#baladas-ingles">Inglês</a>
+    <a href="#bossas-mpb">Bossas</a>
+    <a href="#mpb-moderna">MPB</a>
+    <a href="#world-music">World</a>
+    <a href="#jazz">Jazz</a>
+    <a href="#sambas">Samba</a>
+    <a href="#cerimonial">Cerimônia</a>
+    <a href="#forro">Forró</a>
+  </ul>
+</nav>
+
+<!-- 01 BALADAS EM INGLÊS -->
+<section class="secao" id="baladas-ingles">
+  <div class="secao-header">
+    <div>
+      <div class="secao-numero">01 — Baladas em Inglês</div>
+      <div class="secao-titulo">Baladas<br>em Inglês</div>
+    </div>
+    <div class="secao-count">140 músicas</div>
+  </div>
+  <table class="tabela">
+    <thead>
+      <tr>
+        <th style="width:40%">Música</th>
+        <th style="width:30%">Intérprete</th>
+        <th style="width:10%;text-align:center">Tom</th>
+      </tr>
+    </thead>
+    <tbody id="tbody-ingles"></tbody>
+  </table>
+</section>
+
+<!-- 02 BOSSAS E MPB CLÁSSICAS -->
+<section class="secao" id="bossas-mpb">
+  <div class="secao-header">
+    <div>
+      <div class="secao-numero">02 — Bossas & MPB Clássicas</div>
+      <div class="secao-titulo">Bossas &<br>MPB Clássicas</div>
+    </div>
+    <div class="secao-count">143 músicas</div>
+  </div>
+  <table class="tabela">
+    <thead>
+      <tr>
+        <th style="width:40%">Música</th>
+        <th style="width:30%">Intérprete</th>
+        <th style="width:10%;text-align:center">Tom</th>
+      </tr>
+    </thead>
+    <tbody id="tbody-bossas"></tbody>
+  </table>
+</section>
+
+<!-- 03 MPB MODERNA -->
+<section class="secao" id="mpb-moderna">
+  <div class="secao-header">
+    <div>
+      <div class="secao-numero">03 — MPB Moderna & Baladas</div>
+      <div class="secao-titulo">MPB Moderna<br>& Baladas</div>
+    </div>
+    <div class="secao-count">43 músicas</div>
+  </div>
+  <table class="tabela">
+    <thead>
+      <tr>
+        <th style="width:40%">Música</th>
+        <th style="width:30%">Intérprete</th>
+        <th style="width:10%;text-align:center">Tom</th>
+      </tr>
+    </thead>
+    <tbody id="tbody-mpb"></tbody>
+  </table>
+</section>
+
+<!-- 04 WORLD MUSIC -->
+<section class="secao" id="world-music">
+  <div class="secao-header">
+    <div>
+      <div class="secao-numero">04 — World Music</div>
+      <div class="secao-titulo">World<br>Music</div>
+    </div>
+    <div class="secao-count">6 músicas</div>
+  </div>
+  <table class="tabela">
+    <thead>
+      <tr>
+        <th style="width:40%">Música</th>
+        <th style="width:30%">Intérprete</th>
+        <th style="width:10%;text-align:center">Tom</th>
+      </tr>
+    </thead>
+    <tbody id="tbody-world"></tbody>
+  </table>
+</section>
+
+<!-- 05 JAZZ -->
+<section class="secao" id="jazz">
+  <div class="secao-header">
+    <div>
+      <div class="secao-numero">05 — Jazz Standards</div>
+      <div class="secao-titulo">Jazz<br>Standards</div>
+    </div>
+    <div class="secao-count">40 músicas</div>
+  </div>
+  <table class="tabela">
+    <thead>
+      <tr>
+        <th style="width:40%">Música</th>
+        <th style="width:10%;text-align:center">Tom</th>
+      </tr>
+    </thead>
+    <tbody id="tbody-jazz"></tbody>
+  </table>
+</section>
+
+<!-- 06 SAMBAS -->
+<section class="secao" id="sambas">
+  <div class="secao-header">
+    <div>
+      <div class="secao-numero">06 — Sambas & Samba Rock</div>
+      <div class="secao-titulo">Sambas &<br>Samba Rock</div>
+    </div>
+    <div class="secao-count">46 músicas</div>
+  </div>
+  <table class="tabela">
+    <thead>
+      <tr>
+        <th style="width:40%">Música</th>
+        <th style="width:30%">Intérprete</th>
+        <th style="width:10%;text-align:center">Tom</th>
+      </tr>
+    </thead>
+    <tbody id="tbody-sambas"></tbody>
+  </table>
+</section>
+
+<!-- 07 CERIMÔNIA -->
+<section class="secao" id="cerimonial" style="padding-bottom:60px;">
+  <div class="secao-header">
+    <div>
+      <div class="secao-numero">07 — Sugestões para Cerimônia</div>
+      <div class="secao-titulo">Sugestões<br>para Cerimônia</div>
+    </div>
+  </div>
+
+  <div class="momento-secao">
+    <div class="momento-label">Entrada Padrinhos</div>
+    <div class="cerimonial-grid" id="grid-padrinhos"></div>
+  </div>
+
+  <div class="momento-secao" style="margin-top:48px;">
+    <div class="momento-label">Entrada Noivo</div>
+    <div id="list-noivo"></div>
+  </div>
+
+  <div class="momento-secao" style="margin-top:48px;">
+    <div class="momento-label">Entrada Noiva</div>
+    <div id="list-noiva"></div>
+  </div>
+
+  <div class="momento-secao" style="margin-top:48px;">
+    <div class="momento-label">Daminha / Pajem</div>
+    <div id="list-daminha"></div>
+  </div>
+
+  <div style="margin-top:48px;padding-top:40px;border-top:1px solid var(--linha);">
+    <div class="momento-label">Outros momentos</div>
+    <div class="cerimonial-grid" id="grid-momentos"></div>
+  </div>
+</section>
+
+<!-- 08 FORRÓ -->
+<section class="secao" id="forro">
+  <div class="secao-header">
+    <div>
+      <div class="secao-numero">08 — Forró & Xote</div>
+      <div class="secao-titulo">Forró<br>& Xote</div>
+    </div>
+    <div class="secao-count">14 músicas</div>
+  </div>
+  <table class="tabela">
+    <thead>
+      <tr>
+        <th style="width:40%">Música</th>
+        <th style="width:30%">Intérprete</th>
+        <th style="width:10%;text-align:center">Tom</th>
+      </tr>
+    </thead>
+    <tbody id="tbody-forro"></tbody>
+  </table>
+</section>
+
+<!-- RODAPÉ -->
+<footer class="rodape">
+  <div class="rodape-marca">MIKKA</div>
+  <div class="rodape-releases">
+    <p class="rodape-releases-label">Release de Imprensa</p>
+    <div class="rodape-btns">
+      <a href="https://setlist.mikkaa.net/Release_Mikkaa_2025.pdf" target="_blank" class="btn-release">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Português
+      </a>
+      <a href="https://setlist.mikkaa.net/Release_2026_Mikkaa_compressed.pdf" target="_blank" class="btn-release">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        English
+      </a>
+    </div>
+  </div>
+  <div class="rodape-info">
+    <p>Cardápio Musical <span>·</span> 2025 — 2026</p>
+    <p>Repertório atualizado em <span>Outubro 2025</span></p>
+  </div>
+</footer>
+
+<script>
+// ── DADOS ──────────────────────────────────────────────────
+const ingles = [
+  ["The Way You Look Tonight","Frank Sinatra","A"],["Raindrops Are Falling On My Head","Burt Bacharach","C"],["Close To You","B. Bacharach","Bb"],["Time After Time","Cindy Lauper","C"],["True Colors","Cindy Lauper","C"],["Never Tears Apart","INXS","Db"],["Back To Black","Amy Winehouse","Dm"],["Rehab","Amy Winehouse","C"],["Valerie","Amy Winehouse","Eb"],["Hey Little Rich Girl","Amy Winehouse","A#"],["Love Is A Loosing Game","Amy Winehouse","C"],["Me And Mr Jones","Amy Winehouse","C"],["He Can Only Her","Amy Winehouse","C#"],["Mr Magic","Amy Winehouse","Cm"],["Cupid","Amy Winehouse","G"],["You Know That I No Good","Amy Winehouse","Dm"],["All My Loving","Beatles","Ab"],["Something","Beatles","Eb"],["Michelle","Beatles","—"],["Blackbird","Beatles","—"],["Stand By Me","Beatles","A"],["Eight Days A Week","Beatles","D"],["Let It Be","Beatles","—"],["Here Comes The Sun","Beatles","D"],["Concrete Jungle","Bob Marley","A"],["Waiting Vain","Bob Marley","B"],["3 Little Birds","Bob Marley","A"],["Is This Love","Bob Marley / Corinne B Era","Bb"],["Jamming","Bob Marley","Cm"],["I Want To Break Free","Queen","ORIGINAL"],["I Was Born To Love You","Queen","Ab"],["Love Of My Life","Queen","B"],["I Just Want To Make Love To You","Etta James","B"],["My Girl","The Temptations","D"],["Ain't No Sunshine","Bill Withers","Bbm7"],["My Cherrie Amour","Stevie Wonder","Db"],["I Feel Good","James Brown","D"],["Put Your Records On","Corine Balley Rae","A"],["Umbrella","Rihana","E"],["You Oughta Know","Alanis Morissette","—"],["Ironic","Alanis Morissette","—"],["Hand In My Pocket","Alanis Morissette","—"],["You Learn","Alanis Morissette","—"],["Perfect","Alanis Morissette","—"],["Head Over Feet","Alanis Morissette","C"],["Your Song","Elton John","Bb"],["Can You Feel The Love Tonight","Elton John","—"],["Absolute Beginners","David Bowie","Bb"],["As The World Falls Down","David Bowie","C"],["Modern Love","David Bowie","—"],["Take A Bow","Madonna","G"],["Like A Virgin","Madonna","G"],["Kiss And Say Goodbye","Temptations","A"],["Rude","Magic!","A"],["Dreams","Fleetwood Mac","—"],["Tell Me Something Good","Chaka Khan","—"],["Natural Woman","Aretha Franklin","Ab"],["Sweet Dreams","Euritmics","A"],["Sunday Morning","Maroon Five","C"],["There's Nothing Holding Me Back","Shawn Mendes","D"],["Crazy","Seal","C"],["She Will Be Loved","Maroon Five","D"],["Never Seen Anything Quite Like You","The Script","—"],["Love Hurts","Nazareth","D"],["Fidelity","Regina Specktor","C"],["All That She Wants","Ace Of Base","C#m"],["Suedhead","Morrissey","—"],["Go The Distance","Michael Bolton","—"],["Will Be In My Heart","Phil Collins","—"],["Somewhere Over The Rainbow","Judy Garland","F"],["I Won't Give Up","Jason Mraz","—"],["A Whole New World","Tema Aladdin","—"],["How Far I Go","Tema Moana","—"],["Perfect","Ed Sheeran","—"],["Photography","Ed Sheeran","—"],["Better Together","Jack Johnson","—"],["On The Top Of The World","Imagine Dragons","—"],["I Try","Macy Gray","A"],["I'm So Tired Of Being Alone","Al Green","ORIGINAL"],["All Be There For You","The Rembrandts","—"],["Can't Help Falling Love","Elvis Presley","C"],["Ho Hey","The Lumineers","—"],["Marry You","Bruno Mars","—"],["I Can See Clearly Now","Jimmy Cliff","D"],["Because You Loved Me","Celine Dion","Ab"],["Back On The Chain Gang","Pretenders","D#"],["Candy","Iggy Pop","G"],["Kiss From A Rose","Seal","—"],["Bizarre Love Triangle","New Order","D"],["Havana","Camila Cabelo","ORIGINAL"],["It's Too Late","Carole King","ORIGINAL"],["Isn't She Lovely","Stevie Wonder","D"],["What's Up","4Non Blonde","ORIGINAL"],["Everlong","Foo Fighters","—"],["Don't Know Why","Norah Jones","Bb"],["A Thousand Years","Christina Perri","Bb"],["Dog Days Are Over","Florence + The Machine","ORIGINAL"],["All Of Me","John Legend","—"],["Easy","Commodores","—"],["Get Lucky","Daft Punk","—"],["Lucky Man","The Verve","—"],["Wild Horses","Rolling Stones","—"],["Heal The Pain","George Michael","—"],["Save Me","Aimee Mann","—"],["Both Sides Now","Joni Mitchell","—"],["Dancing With Myself","Nouvelle Vague","—"],["Don't Worry Be Happy","Bob McFerrin","C"],["Never Be Alone","Shawn Mendes","—"],["Glad You Came","Boyce Avenue","Bm"],["Feel Like Making Love","Bad Company","G"],["I Gotta Feeling","Black Eyed Peas","—"],["Uptown Funk","Mark Ronson","—"],["Psycho Killer","Talking Heads","—"],["All About That Bass","Meghan Trainor","—"],["Lucky","Jason Mraz","—"],["Love On Top","Beyoncé","—"],["Don't Start Now","Dua Lipa","—"],["Training Season","Dua Lipa","—"],["Smile","Lily Allen","—"],["Somewhere Only We Know","Lily Allen & Keane","—"],["I Don't Wanna Miss A Thing","Aerosmith","DsusM"],["You Got A Friend In Me","Tema Toy Story","—"],["I Say A Little Prayer For You","Aretha Franklin","—"],["Careless Whisper","George Michael","—"],["Coming Around Again","Carly Simon","F"],["Sky Full Of Stars","Coldplay","Ebm"],["XO","Beyoncé","C"],["Kiss And Say Goodbye","The Manhattans","Bb"],["I'm Yours","Jason Mraz","C"],["Miss You","Carla Bruni","Am"],["I Heard It Through The Grapevine","Marvin Gaye","Dm"],["No One","Alicia Keys","E"],["If Ain't Got You","Alicia Keys","—"],["Super Duper Love","Joss Stone","G"],["Ain't Til It's Over","Lenny Kravitz","Db"],["Tainted Love","Soft Cell","D"],["Rolling In The Deep","Adele","Em"],["Billie Jean","Michael Jackson","F#m"],["Love Never Felt So Good","Michael Jackson","Bb"],["Let's Stay Together","Al Green","—"],
+];
+
+const bossas = [
+  ["A Rã","João Donato","—"],["Corcovado","Tom Jobim","Am"],["Quiet Night","Tom Jobim","Am"],["Esse Seu Olhar","Tom Jobim","F"],["Wave","Tom Jobim","D"],["Chega De Saudade","Tom Jobim","Dm"],["Pela Luz Dos Olhos Teus","Tom Jobim","—"],["Desafinado","Tom Jobim","—"],["Só Tinha De Ser Com Você","Tom Jobim","Bb / F"],["Garota De Ipanema","Tom Jobim","D"],["O Canto De Ossanha","Tom Jobim","Db"],["Água De Beber","Tom Jobim","Am"],["Eu Sei Que Vou Te Amar","Tom Jobim","—"],["Samba De Uma Nota Só","Tom Jobim","—"],["Onde Anda Você","Tom Jobim / Toquinho","Bb"],["Águas De Março","Tom Jobim","—"],["Samba Da Benção","Vinicius de Moraes","Csus"],["Diz Que Fui Por Aí","Nara Leão","—"],["O Barquinho","Nara Leão","—"],["Cara Valente","Maria Rita","A7"],["Deixa","Elis Regina","—"],["O Trem Azul","Elis Regina","—"],["É Com Esse Que Eu Vou","Elis Regina","—"],["Romaria","Elis Regina","D"],["Madalena","Elis Regina","D"],["Folhas Secas","Elis Regina","—"],["Tiro Ao Álvaro","Elis Regina","Cm"],["Como Nossos Pais","Elis Regina","—"],["Ladeira Da Preguiça","Elis Regina","C7"],["Upa Neguinho","Elis Regina","—"],["Alô Alô Marciano","Elis Regina","—"],["Fascinação","Elis Regina","—"],["Andança","Elis Regina","—"],["Menino Das Laranjas","Elis Regina","—"],["O Bêbado E A Equilibrista","J. Bosco / Elis","E"],["Mas Que Nada","Jorge Benjor","Am"],["Chove Chuva","Jorge Benjor","A7"],["Fio Maravilha","Jorge Benjor","—"],["Alegria Alegria","Caetano Veloso","—"],["Leãozinho","Caetano Veloso","A"],["Samba De Verão","Caetano Veloso","C"],["Tigresa","Caetano Veloso","—"],["Odara","Caetano Veloso","—"],["Sampa","Caetano Veloso","—"],["Leãozinho","Caetano Veloso","D"],["Você É Linda","Caetano Veloso","Gb / G"],["Samurai","Djavan","—"],["Um Amor Puro","Djavan","Am"],["Flor De Liz","Djavan","G / E"],["Sina","Djavan","—"],["Linha Do Equador","Djavan","G"],["Eu Te Devoro","Djavan","G"],["Se","Djavan","—"],["Oceano","Djavan","—"],["Meu Bem Querer","Djavan","—"],["Lambada De Serpente","Djavan","—"],["Pétala","Djavan","—"],["Nenhum Dia","Djavan","—"],["Vapor Barato","Gal Costa","—"],["Barato Total","Gal Costa","—"],["Baby","Gal Costa","—"],["Chuva De Prata","Gal Costa","—"],["Um Dia De Domingo","Gal Costa","—"],["Divino Maravilhoso","Gal Costa","—"],["Força Estranha","Gal Costa","—"],["Azul","Gal Costa","—"],["Codinome Beija-Flor","Cazuza","—"],["Eu Preciso Dizer Que Te Amo","Cazuza","C"],["Mania De Você","Rita Lee","—"],["Caso Sério","Rita Lee","Cm"],["Desculpe O Auê","Rita Lee","—"],["Ovelha Negra","Rita Lee","—"],["Agora Só Falta Você","Rita Lee","—"],["Nem Luxo, Nem Lixo","Rita Lee","—"],["Ando Meio Desligado","Mutantes","—"],["Menino Bonito","Mutantes","—"],["Balada Do Louco","Mutantes","—"],["Clube Da Esquina 2","Clube Da Esquina","—"],["Ah Se Eu Soubesse","Chico Buarque","—"],["Mambembe","Chico Buarque","—"],["Apesar De Você","Chico Buarque","—"],["O Meu Amor","Chico Buarque","—"],["Quem Te Viu, Quem Te Vê","Chico Buarque","—"],["A Banda","Chico Buarque","—"],["Com Açúcar, Com Afeto","Chico Buarque","—"],["Olhos Nos Olhos","Chico Buarque","—"],["Samba Do Grande Amor","Chico Buarque","—"],["Atrás Da Porta","Chico Buarque","—"],["Retrato Em Branco E Preto","Chico Buarque","—"],["João E Maria","Chico Buarque","—"],["Carinhoso","Cartola","Ab"],["O Mundo É Um Moinho","Cartola","G"],["Preciso Me Encontrar","Cartola","—"],["Corra E Olha O Céu","Cartola","A"],["Palco","Gilberto Gil","—"],["Estrela","Gilberto Gil","—"],["Esotérico","Gilberto Gil","C"],["Amor Perfeito","Roberto Carlos","—"],["Quero Que Tudo Vá Pro Inferno","Roberto Carlos","—"],["Como É Grande O Meu Amor Por Você","Roberto Carlos","D"],["Fim De Tarde","Fat Family / Cláudia Telles","D"],["A Lua Que Eu Te Dei","Ivete Sangalo","Bb"],["É O Amor","Zezé Di Camargo e Luciano / Maria Bethânia","Bb"],["Evidências","Chitãozinho e Xororó","E"],["Tocando Em Frente","Almir Sater","—"],["La Belle De Jour / Girassol","Alceu Valença","—"],["Dancing Days","As Frenéticas","—"],["Paixão","Kleiton e Kledir","D"],["A Canção Que Faltava","Isabela Taviani","B"],["Como Eu Quero","Kid Abelha","—"],["Pintura Íntima","Kid Abelha","—"],["Dança Da Solidão","Marisa Monte","Fm"],["Na Estrada","Marisa Monte","—"],["Beija Eu","Marisa Monte","D"],["A Menina Dança","Novos Baianos","—"],["Amor I Love You","Marisa Monte","D"],["Não Vá Embora","Marisa Monte","—"],["Balança A Pema","Marisa Monte","—"],["Cérebro Eletrônico","Marisa Monte","—"],["De Mais Ninguém","Marisa Monte","—"],["De Noite Na Cama","Gil / Marisa Monte","—"],["Negro Gato","Marisa Monte","—"],["Aliança","Marisa Monte","Db"],["O Que Me Importa","Marisa Monte","—"],["Para Ver As Meninas","Marisa Monte","—"],["Vilarejo","Marisa Monte","—"],["Magamalabares","Marisa Monte","—"],["Gentileza","Marisa Monte","—"],["Esta Melodia","Marisa Monte","—"],["Ainda Bem","Marisa Monte","—"],["Bem Que Se Quis","Marisa Monte","Eb"],["Maria De Verdade","Marisa Monte","Ab"],["Ainda Lembro","Marisa Monte","A"],["O Xote Das Meninas","Marisa Monte","C"],["A Primeira Vista","Chico César","—"],["Hoje Eu Quero Sair Só","Lenine","Dm"],["A Dois Passos Do Paraíso","Blitz","—"],["Gostava Tanto De Você","Tim Maia","D"],["Não Quero Dinheiro","Tim Maia","C"],["País Tropical","—","C"],
+];
+
+const mpb = [
+  ["Pra Você Guardei","Nando Reis / Ana Canas","—"],["Oração","A Banda Mais Bonita da Cidade","D"],["Pra Sonhar","Marcelo Jeneci","—"],["Simples Desejo","Luciana Melo","—"],["Já Sei Namorar","Tribalistas","—"],["Malemolência","Ceu","—"],["A Canção Que Falta","Isabela Taviani","B"],["Lenda","Ceu","—"],["Ainda Bem","Vanessa da Mata","Eb"],["Sorri, Sou Rei","Natiruts","—"],["Realejo","O Teatro Mágico","—"],["Velha Infância","Tribalistas","Fsusm"],["Trem Bala","Ana Vilela","—"],["Dia Especial","Thiago Iorc","—"],["A Pedra Mais Alta","Teatro Mágico","—"],["Sinais De Fogo","Preta Gil","—"],["De Janeiro A Janeiro","Roberta Campos","A"],["Meu Abrigo","Melim","A"],["Ai Amor","Anavitoria","—"],["Fica","Anavitoria","—"],["Deus Me Proteja De Mim","Chico César","—"],["Proibida Pra Mim","Zeca Baleiro","F"],["Tangerina","Duda Beat","—"],["Me Abraça, Me Beija","Ana Vitória","—"],["Ouvi Dizer","Melim","—"],["Deusa Do Amor","Moreno Veloso","—"],["Anjo Do Céu","Maskavo","—"],["Baianidade Nagô","Anavitoria","—"],["Tudo O Que For Leve","Alice Caymmi","D"],["Trevo","Anavitoria","Bb"],["Dois Corações","Melim","—"],["Menina Solta","Giulia Be","—"],["Pupila","Victor Kley","—"],["Partilhar","Rubel e Anavitoria","Bb"],["Medo Bobo","Maiara e Maraisa","—"],["Amizade É Tudo","Thiaguinho","—"],["Meu Talismã","Iza","—"],["Felicidade","Seu Jorge","C"],["Boa Sorte","Vanessa da Mata","C sus"],["Várias Queixas","Gilsons","—"],["Bixinho","Duda Beat","—"],["Arerê","Ivete","E"],["Fica Tudo Bem","Anitta","Eb"],
+];
+
+const world = [
+  ["La Vie En Rose","Edith Piaf","Ab"],["Meu Amor Marinheiro","Carminho","Gsusm"],["Per Amore","Zizi Possi","G"],["Recuerdos De Ypacaraí","—","—"],["Rie Chinito","Perota Chingo","—"],["Cancion Para El Viento","Perota Chingo","—"],
+];
+
+const jazz = [
+  ["Cheek To Cheek","—","G"],["All Of Me","—","—"],["Undecided","—","E"],["A Night In Tunisia","—","—"],["Misty","—","—"],["Summertime","—","Bm"],["Caravan","—","—"],["Dream A Little Dream","—","C"],["A Tisket A Tasket","—","—"],["Let's Fall In Love","—","—"],["Água De Beber","—","—"],["Blue Moon","—","C"],["Moon River","—","—"],["Lullaby Of Birdland","—","—"],["Blue Skies","—","—"],["Cry Me A River","—","—"],["Smooth Sailing","—","—"],["It Don't Mean A Thing","—","—"],["Feeling Good","—","—"],["La Vie En Rose","—","Ab"],["Lovefool","—","—"],["Oops I Didn't Again","—","—"],["Miss Celie's Blues","—","—"],["Dance Me To The End Of Love","—","—"],["Solitude","—","—"],["Hit The Road Jack","—","—"],["I Know You Know","—","—"],["The Man I Love","—","—"],["I Feel Good","—","—"],["I Just Wanna Make Love To You","—","—"],["Back To Black","—","—"],["Ain't No Sunshine","—","—"],["Miss Celie's Blues (Sister)","—","—"],["Perhaps, Perhaps, Perhaps","—","—"],["Unforgettable","—","—"],["That's Amore","—","—"],["Singin' In The Rain","—","—"],["My Heart Belongs To Daddy","—","—"],["Unchained Melody","—","—"],["Sea Of Love","—","—"],
+];
+
+const sambas = [
+  ["Não Me Deixe Só","Vanessa da Mata","A"],["Olhos Coloridos","Sandra de Sá","Fm"],["Meu Guarda-Chuva","Paula Lima","—"],["Cara Valente","Maria Rita","A7"],["Ladeira Da Preguiça","Elis Regina","C7"],["Upa Neguinho","Elis Regina","—"],["Mas Que Nada","Jorge Benjor","Fm"],["Chove Chuva","Jorge Benjor","Csus"],["Água De Beber","Tom Jobim","Am"],["Malandro","Elza Soares","—"],["Pelas Tabelas","Chico Buarque","E"],["Ex Amor","Simone","—"],["Fio Maravilha","Jorge Benjor","—"],["Flor De Liz","Djavan","G"],["Do Fundo Do Nosso Quintal","Fundo de Quintal","—"],["Canta Canta Minha Gente","Martinho da Vila","D"],["O Mar Serenou","Clara Nunes","D"],["Tiro Ao Álvaro","Elis Regina","Cm"],["O Show Tem Que Continuar","Beth Carvalho","—"],["Bananeira","Bebel Gilberto","ORIGINAL"],["Andança","Beth Carvalho","E"],["Dança Da Solidão","Marisa Monte","Fm"],["Verdade","Zeca Pagodinho","Ab"],["Maneiras","Zeca Pagodinho","—"],["Isso Aqui É O Que É","Ary Barroso","C"],["Saudosa Maloca","Adoniran Barbosa","Em"],["O Sol Nascerá","Cartola","A"],["Com Que Roupa","Noel Rosa","A"],["Eva","Banda Eva","D"],["Não Deixe O Samba Morrer","Alcione","Bm"],["Mila","Netinho","G"],["Trem Das Onze","Demônios da Garoa","Fm"],["Beleza Rara","Banda Eva","C"],["Alguém Avisou","Ivone Lara","—"],["Corra E Olha O Céu","Cartola","—"],["Você Abusou","A. C. e Jocafi","A"],["Vem Meu Amor","Ivete","E"],["Me Abraça","Ivete","A"],["Baianidade Nagô","—","A"],["Pé Na Areia","—","Ab"],["Burguesinha","Seu Jorge","D"],["Deixa Acontecer","—","—"],["Sonho Meu","Ivone Lara","A"],["Deixa A Vida Me Levar","Zeca Pagodinho","Ab"],["Tá Escrito","Grupo Revelação","Ab"],["Acreditar","Ivone Lara","A"],
+];
+
+const forro = [
+  ["Eu Só Quero Um Xodó","Gilberto Gil","A / C"],["Asa Branca","Luiz Gonzaga","C"],["Anunciação","Alceu Valença","—"],["Te Faço Um Cafuné","Mariana Aydar","D"],["Esperando Na Janela","Gilberto Gil","G"],["Xote Das Meninas","Marisa Monte","C"],["Gostoso Demais","Maria Bethânia","G"],["De Volta Pro Meu Aconchego","Elba Ramalho","G"],["Lamento Sertanejo","Dominguinhos","—"],["Abrí A Porta","Dominguinhos","—"],["Coração Bobo","Alceu Valença","—"],["Ai Que Saudade Docê","Elba Ramalho","—"],["Nosso Xote","Bicho de Pé","—"],["Andar Com Fé","Gilberto Gil","—"],
+];
+
+// ── RENDER ─────────────────────────────────────────────────
+function renderTabela(dados, tbodyId, showInterprete = true) {
+  const tbody = document.getElementById(tbodyId);
+  dados.forEach(([musica, interprete, tom]) => {
+    const tr = document.createElement('tr');
+    let tomHTML = '';
+    if (tom && tom !== '—') {
+      const cls = tom === 'ORIGINAL' ? 'tag-tom original' : 'tag-tom';
+      tomHTML = `<span class="${cls}">${tom}</span>`;
+    }
+    if (showInterprete) {
+      tr.innerHTML = `<td>${musica}</td><td class="interprete">${interprete}</td><td style="text-align:center">${tomHTML}</td>`;
+    } else {
+      tr.innerHTML = `<td>${musica}</td><td style="text-align:center">${tomHTML}</td>`;
+    }
+    tbody.appendChild(tr);
+  });
+}
+
+function renderJazz() {
+  const tbody = document.getElementById('tbody-jazz');
+  jazz.forEach(([musica, _, tom]) => {
+    const tr = document.createElement('tr');
+    let tomHTML = '';
+    if (tom && tom !== '—') tomHTML = `<span class="tag-tom">${tom}</span>`;
+    tr.innerHTML = `<td>${musica}</td><td style="text-align:center">${tomHTML}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// Cerimônia
+const padrinhos = ["Hallelujah (Leonard Cohen)","Let it Be (Beatles)","Pachelbel's Canon (Bach)","Friends Will be Friends (Queen)","Tema do Friends (Seriado)","Tema Game of Thrones (Seriado)","Fly Me To The Moon (Sinatra)","From This Moment (S. Twain)","Against All Odds (P. Collins)","Don't Wanna Close My Eyes (Aerosmith)","Your Song (Elton John)","Why Can't We be Friends (Smash Mouth)","If Ain't Got You (Alicia Keys)","Somewhere Only We Know (Keane)","Torna a Surriento (Pavarotti)","Elephant Gun (Beirut)","Primavera (Vivaldi)","Für Elise (Beethoven)","Don't Know Why (Norah Jones)","Come Away With Me (Norah Jones)","Cheek To Cheek (Sinatra)","You've Got A Friend In Me (Toy Story)","Glamour Tropical (Natiruts)","Partners Again (Tom Jobim)","Dia Especial (Tiago Iorc)","Alegria (Cirque du Soleil)","De Janeiro a Janeiro (Nando Reis)"];
+
+const noivo = ["All of Me (John Legend)","Photograph (Ed Sheeran)","Love Someone (Jason Mraz)","I Was Born To Love You (Queen)","All of My Love (Led Zeppelin)","Nothing Else Matters (Metallica)","Stairway to Heaven (Led Zeppelin)","Wish You Were Here (Pink Floyd)","Here Comes Your Man (Pixies)","Proibida pra mim (Zeca Baleiro)","Take Me to the Church (Hozier)","Someday My Prince Will Come (Disney)","Love Me Tender (Elvis)","Lucky (Jason Mraz)","Con Te Partiro (Pavarotti)","Tema do Poderoso Chefão","93 Million Reasons (J. Mraz)","Rude (Magic)","Home (Phillip Phillips)","Home (Edward Sharpe)","Never Be Alone (Shawn Mendes)","How Deep Is Your Love (Bee Gees)","Perfect (Ed Sheeran)","Seu Olhar (Seu Jorge)","Anunciação (Alceu Valença)","Romaria (Renato Teixeira)","Amei Te Ver (Tiago Iorc)","É Isso Aí (Seu Jorge)","When You Got A Good Thing (Lady A)","XO (John Mayer)","Everlong (Foo Fighters)"];
+
+const noiva = ["Marcha Nupcial (Mendelssohn)","Isn't She Lovely (Stevie Wonder)","Somewhere Over The Rainbow","Your Song (Elton John)","Close To You (Carpenters)","She (Elvis Costello)","My Girl (Temptations)","Here Comes The Sun (Beatles)","All You Need Is Love (Beatles)","Something (Beatles)","Halo (Beyoncé)","Cruisin (Duets)","La Vie En Rose (Edith Piaf)","Love (Nat King Cole)","Won't Give Up (J. Mraz)","Diamonds (Rihanna)","Dia Branco (Geraldo Azevedo)","Carinhoso (Pixinguinha)","Trevo (Ana Vitória)","Trem Bala (Ana Vilela)","A Primeira Vista (Chico César)","Bela Flor (Maria Gadú)","Ainda Bem (Thiaguinho)","Você é Linda (Caetano)","La Vie En Rose (Edith Piaf)","Pra Você Guardei (Nando)","Pra Sonhar (Jeneci)","Frisson (Elba Ramalho)","Estrela (Gil)"];
+
+const daminha = ["Ave Maria (Gounod)","Ave Maria (Schubert)","Let it Go (Frozen)","Mundo Ideal (Aladdin)","Hakuna Matata (Rei Leão)","Three Little Birds (Bob)","How Far I Go (Moana)","Somewhere Over The Rainbow","Can't Stop The Feeling (Justin)","Kiss The Girl (Pequena Sereia)","Carinhoso (Pixinguinha)","O Barquinho (Tom)","Bela Flor (Maria Gadú)","Eu Vou (Branca de Neve)","Você Quer Brincar Na Neve?","Pelo Luz dos Olhos Teus (Tom)","A Bela e a Fera","Alecrim Dourado","Anjo do Céu (Reggae)","Minha Menina (Jorge Ben)","Só Tinha de Ser com Você","Wave (Tom)","Fico Assim sem Você","Aquarela (Toquinho)","Anunciação (Alceu Valença)","Beija Flor (Timbalada)","De Janeiro a Janeiro (Nando Reis)","Velha Infância (Tribalistas)","Você é Linda (Caetano)","Estrela (Gil)"];
+
+const momentos = {
+  "Alianças": ["Meu Primeiro Amor (Sandy)"],
+  "Fundo de Assinaturas / Votos": ["Wonderful World (L. Armstrong)","Can't Help Falling (Elvis)","One Love (Bob Marley)","Over The Rainbow (Israel K.)","Three Little Birds (Bob)","Don't Worry Be Happy (Bobby McFerrin)","Blackbird (Beatles)","Change The World (Eric Clapton)","More Than Words (Extreme)","Thinking Out Loud (Ed Sheeran)","Yellow (Coldplay)","The Scientist (Coldplay)","Pela Luz dos Olhos Teus (Tom)","Eu Sei Que Vou Te Amar (Tom)","Wave (Tom) / Carinhoso (Pixinguinha)","Con Te Partiro (Pavarotti)","Como é Grande o Meu Amor (R. Carlos)","Your Song (Elton John)","How Deep Is Your Love (Bee Gees)","Fly Me To The Moon (Sinatra)","Stairway to Heaven (Led Zeppelin)","Una Mattina (Ludovico)","Isn't She Lovely (Stevie Wonder)","Sky Full of Stars (Coldplay)","Just the Way You Are (B. Mars)","Love Me Tender (Elvis)"],
+  "Beijo / Cumprimentos": ["Stand By Me (Beatles)","Better Together (Jack Johnson)","Your Song (Elton John)","Paradise (Coldplay)","Rude (Magic)","How Deep Is Your Love (Bee Gees)","Every Teardrop Is Waterfall (Coldplay)","Your Song (Elton John)","Paradise (Coldplay)","Fly Me To The Moon (Sinatra)","I'm Yours (Jason Mraz)","Just the Way You Are (B. Mars)","Kiss Me (King of Lion)","With or Without You (U2)","Como é Grande o Meu Amor (R. Carlos)","Love Story (Taylor Swift)","Ho Hey (The Lumineers)","Sky Full of Stars (Coldplay)","Everything (Bublé)","Mirrors (Justin)","Like I'm Gonna Lose You","Isn't She Lovely (Stevie Wonder)"],
+  "Saída dos Noivos": ["All You Need Is Love (Beatles)","Marry You (Bruno Mars)","Sugar (Maroon 5)","Happy (Pharell)","Dog Days Are Over (Florence)","Budapest (George Ezra)","Without You (David Guetta)","Viva La Vida (Coldplay)","The Best Day (American Authors)","Isn't She Lovely (Stevie Wonder)","Eight Days A Week (Beatles)","Don't Stop Me Now (Queen)","I Do (Colbie Caillat)","Signed, Sealed, Delivered","Something Just Like This","Love Is In The Air (J. P. Young)","Can't Take My Eyes Off You (L. Hill)","Crazy Little Thing Called Love","I Can See Clearly (Jimmy Cliff)","Volare (Gipsy Kings)","Clarity (Zedd)","Glad You Came (The Wanted)","Oração (Banda Mais Bonita da Cidade)","Que Sorte a Nossa (Matheus e Kauan)","Você e Eu (Tim Maia)","Por Você (Barão)","Me Abraça (Ana Vitoria)","Balada do Amor Inabalável (Skank)"],
+};
+
+function renderListaSimples(items, containerId) {
+  const div = document.getElementById(containerId);
+  const cols = Math.ceil(items.length / 3);
+  const grid = document.createElement('div');
+  grid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;';
+  [0,1,2].forEach(i => {
+    const col = document.createElement('div');
+    col.style.cssText = 'border:1px solid var(--linha);padding:0;';
+    const ul = document.createElement('ul');
+    ul.style.cssText = 'list-style:none;padding:0;margin:0;';
+    items.slice(i*cols, (i+1)*cols).forEach(item => {
+      const li = document.createElement('li');
+      li.style.cssText = 'font-size:12px;padding:10px 16px;border-bottom:1px solid var(--linha);font-weight:300;line-height:1.4;color:var(--grafite);';
+      li.textContent = item;
+      ul.appendChild(li);
+    });
+    col.appendChild(ul);
+    grid.appendChild(col);
+  });
+  div.appendChild(grid);
+}
+
+function renderMomentos() {
+  const container = document.getElementById('grid-momentos');
+  Object.entries(momentos).forEach(([momento, items]) => {
+    const col = document.createElement('div');
+    col.className = 'cerimonial-col';
+    const header = document.createElement('div');
+    header.className = 'cerimonial-col-header';
+    header.innerHTML = `<h3>${momento}</h3>`;
+    const ul = document.createElement('ul');
+    items.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      ul.appendChild(li);
+    });
+    col.appendChild(header);
+    col.appendChild(ul);
+    container.appendChild(col);
+  });
+}
+
+function renderPadrinhos() {
+  const container = document.getElementById('grid-padrinhos');
+  container.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;margin-top:0;';
+  const cols = Math.ceil(padrinhos.length / 3);
+  [0,1,2].forEach(i => {
+    const col = document.createElement('div');
+    col.className = 'cerimonial-col';
+    const ul = document.createElement('ul');
+    padrinhos.slice(i*cols, (i+1)*cols).forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      ul.appendChild(li);
+    });
+    col.appendChild(ul);
+    container.appendChild(col);
+  });
+}
+
+// INIT
+renderTabela(ingles, 'tbody-ingles');
+renderTabela(bossas, 'tbody-bossas');
+renderTabela(mpb, 'tbody-mpb');
+renderTabela(world, 'tbody-world');
+renderJazz();
+renderTabela(sambas, 'tbody-sambas');
+renderTabela(forro, 'tbody-forro');
+renderPadrinhos();
+renderListaSimples(noivo, 'list-noivo');
+renderListaSimples(noiva, 'list-noiva');
+renderListaSimples(daminha, 'list-daminha');
+renderMomentos();
+</script>
+</body>
+</html>
